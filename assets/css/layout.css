@@ -245,7 +245,7 @@
 
 .hero-scroll-hint {
   position: absolute;
-  bottom: 32px;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -258,6 +258,7 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--white-muted);
+  pointer-events: none;
 }
 
 .hero-scroll-line {
@@ -454,24 +455,61 @@
 }
 
 @media (max-width: 679px) {
+  .site-header {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
   .header-inner {
     padding-inline: 0;
+    min-height: var(--header-h);
   }
 
   .logo-text {
     font-size: 1.2rem;
   }
 
+  .menu-toggle {
+    align-self: center;
+  }
+
   .hero {
-    padding: calc(var(--header-h) + 24px) 0 56px;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px) 0
+      calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
   }
 
   .hero-title {
-    font-size: clamp(2.2rem, 11vw, 3.2rem);
+    font-size: clamp(2.2rem, 10.5vw, 3.2rem);
+  }
+
+  .hero-line {
+    line-height: 1.18;
+  }
+
+  .hero-subtitle {
+    margin-top: 20px;
+    max-width: 100%;
+  }
+
+  .hero-ctas {
+    margin-top: 28px;
   }
 
   .hero-badges {
+    margin-top: 28px;
     gap: 8px;
   }
 
@@ -479,16 +517,34 @@
     font-size: 0.68rem;
     padding: 6px 10px;
   }
-}
 
-@media (max-width: 479px) {
   .hero-scroll-hint {
-    display: none;
+    position: absolute;
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    opacity: 0.85;
+  }
+
+  .hero-scroll-line {
+    height: 36px;
   }
 }
 
 @media (max-width: 399px) {
   .hero-ctas .btn {
     width: 100%;
+  }
+}
+
+@media (display-mode: standalone) {
+  .hero {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero-scroll-hint {
+    bottom: max(28px, env(safe-area-inset-bottom, 0px));
+    opacity: 1;
   }
 }
