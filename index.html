@@ -28,7 +28,6 @@
   <header class="site-header" id="siteHeader">
     <div class="container header-inner">
       <a href="#inicio" class="logo" aria-label="InnoDev, voltar para o início">
-        <img src="assets/img/logo_menu.png" alt="" width="36" height="36" class="logo-img">
         <span class="logo-text"><span class="logo-inno">Inno</span><span class="logo-dev">Dev</span></span>
       </a>
 
@@ -186,15 +185,17 @@
 
         <div class="testimonial-region reveal" id="testimonialRegion">
           <div class="testimonial-wrap" id="testimonialWrap">
-            <button class="carousel-btn" id="prevTestimonial" aria-label="Depoimento anterior">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
             <div class="testimonial-track" id="testimonialTrack" aria-live="polite"></div>
-            <button class="carousel-btn" id="nextTestimonial" aria-label="Próximo depoimento">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+            <div class="testimonial-nav">
+              <button class="carousel-btn" id="prevTestimonial" aria-label="Depoimento anterior">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <div class="testimonial-dots" id="testimonialDots" aria-hidden="true"></div>
+              <button class="carousel-btn" id="nextTestimonial" aria-label="Próximo depoimento">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="testimonial-dots" id="testimonialDots" aria-hidden="true"></div>
         </div>
       </div>
     </section>
@@ -243,7 +244,7 @@
           <p class="section-lead">Fale diretamente com a equipe. Retornamos com direcionamento técnico e proposta personalizada.</p>
 
           <div class="contact-details">
-            <div class="contact-item">
+            <div class="contact-item contact-item--email">
               <span class="contact-label">Email</span>
               <a href="mailto:innodevoficial@gmail.com">innodevoficial@gmail.com</a>
             </div>

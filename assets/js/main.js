@@ -110,7 +110,10 @@ function renderTestimonials(data) {
       (item, index) => `
         <article class="testimonial${index === 0 ? " is-active" : ""}" data-index="${index}">
           <div class="testimonial-quote-mark" aria-hidden="true">"</div>
-          <blockquote>${item.quote}</blockquote>
+          <div class="testimonial-body">
+            <blockquote class="is-clamped">${item.quote}</blockquote>
+            <button type="button" class="testimonial-toggle" hidden>Ler depoimento completo</button>
+          </div>
           <footer>
             <cite>${item.name}</cite>
             <span>${item.role}</span>
@@ -125,7 +128,7 @@ function renderTestimonials(data) {
     testimonialDots.innerHTML = data
       .map(
         (_, index) =>
-          `<button class="testimonial-dot${index === 0 ? " is-active" : ""}" data-dot="${index}" aria-label="Ir para depoimento ${index + 1}"></button>`
+          `<button type="button" class="testimonial-dot${index === 0 ? " is-active" : ""}" data-dot="${index}" aria-label="Ir para depoimento ${index + 1}"></button>`
       )
       .join("");
 
@@ -136,12 +139,76 @@ function renderTestimonials(data) {
       });
     });
   }
+
+  initTestimonialClamp();
+}
+
+function collapseTestimonial(item) {
+  const blockquote = item.querySelector("blockquote");
+  const toggle = item.querySelector(".testimonial-toggle");
+  if (!(blockquote instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement)) return;
+
+  blockquote.classList.add("is-clamped");
+  blockquote.classList.remove("is-expanded");
+  toggle.textContent = "Ler depoimento completo";
+}
+
+function evaluateTestimonialClamp(item) {
+  const blockquote = item.querySelector("blockquote");
+  const toggle = item.querySelector(".testimonial-toggle");
+  if (!(blockquote instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement)) return;
+
+  blockquote.classList.add("is-clamped");
+  blockquote.classList.remove("is-expanded");
+  toggle.hidden = true;
+
+  requestAnimationFrame(() => {
+    const isOverflowing = blockquote.scrollHeight > blockquote.clientHeight + 1;
+    toggle.hidden = !isOverflowing;
+  });
+}
+
+function initTestimonialClamp() {
+  if (!(testimonialTrack instanceof HTMLElement)) return;
+
+  testimonialTrack.querySelectorAll(".testimonial").forEach((item) => {
+    const toggle = item.querySelector(".testimonial-toggle");
+    if (!(toggle instanceof HTMLButtonElement)) return;
+
+    if (toggle.dataset.bound === "true") return;
+    toggle.dataset.bound = "true";
+
+    toggle.addEventListener("click", () => {
+      const blockquote = item.querySelector("blockquote");
+      if (!(blockquote instanceof HTMLElement)) return;
+
+      const isExpanded = blockquote.classList.contains("is-expanded");
+      if (isExpanded) {
+        collapseTestimonial(item);
+        evaluateTestimonialClamp(item);
+      } else {
+        blockquote.classList.remove("is-clamped");
+        blockquote.classList.add("is-expanded");
+        toggle.textContent = "Recolher";
+      }
+    });
+
+    if (item.classList.contains("is-active")) {
+      evaluateTestimonialClamp(item);
+    }
+  });
 }
 
 function setTestimonial(index) {
   if (!(testimonialTrack instanceof HTMLElement)) return;
   const items = testimonialTrack.querySelectorAll(".testimonial");
   if (!items.length) return;
+
+  items.forEach((item) => {
+    if (item.classList.contains("is-active")) {
+      collapseTestimonial(item);
+    }
+  });
 
   testimonialIndex = (index + items.length) % items.length;
 
@@ -152,6 +219,24 @@ function setTestimonial(index) {
   testimonialDots?.querySelectorAll(".testimonial-dot").forEach((dot, i) => {
     dot.classList.toggle("is-active", i === testimonialIndex);
   });
+
+  const activeItem = items[testimonialIndex];
+  if (activeItem instanceof HTMLElement) {
+    evaluateTestimonialClamp(activeItem);
+  }
+}
+
+let resizeClampTimer = null;
+
+function scheduleClampRecheck() {
+  if (resizeClampTimer) window.clearTimeout(resizeClampTimer);
+  resizeClampTimer = window.setTimeout(() => {
+    if (!(testimonialTrack instanceof HTMLElement)) return;
+    const activeItem = testimonialTrack.querySelector(".testimonial.is-active");
+    if (activeItem instanceof HTMLElement) {
+      evaluateTestimonialClamp(activeItem);
+    }
+  }, 150);
 }
 
 function initTestimonialCarousel() {
@@ -261,3 +346,5 @@ if (!reduceMotion && "IntersectionObserver" in window) {
 initTestimonialCarousel();
 initScrollSpy();
 initCursorGlow();
+
+window.addEventListener("resize", scheduleClampRecheck);

@@ -15,6 +15,9 @@
   --font-display: "Syne", system-ui, sans-serif;
   --font-body: "Space Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --heading-line-tight: 1.15;
+  --heading-line-normal: 1.25;
+  --heading-line-relaxed: 1.3;
 }
 
 *,
@@ -74,23 +77,36 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
 }
 
 h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
   font-size: clamp(2.8rem, 9vw, 5.5rem);
+  line-height: var(--heading-line-tight);
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.65rem, 4.2vw, 2.75rem);
+  line-height: var(--heading-line-normal);
+  letter-spacing: 0;
 }
 
 h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: clamp(1.1rem, 3vw, 1.35rem);
-  font-weight: 700;
+  line-height: var(--heading-line-relaxed);
+  letter-spacing: 0;
+}
+
+h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  line-height: var(--heading-line-relaxed);
 }
 
 p {
